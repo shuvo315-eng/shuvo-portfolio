@@ -93,43 +93,7 @@ function typeLoop() {
 }
 setTimeout(typeLoop, 2000);
 
-// ---------- 6. Profile photo upload (saved in this browser) ----------
-const photoInput = document.getElementById("photoInput");
-const photoImg = document.getElementById("photoImg");
-const photoEmpty = document.getElementById("photoEmpty");
-const PHOTO_KEY = "pf-photo";
-
-function showPhoto(src) {
-  photoImg.src = src;
-  photoImg.hidden = false;
-  photoEmpty.hidden = true;
-}
-
-const savedPhoto = localStorage.getItem(PHOTO_KEY);
-if (savedPhoto) showPhoto(savedPhoto);
-
-photoInput.addEventListener("change", () => {
-  const file = photoInput.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    // shrink the image so it fits in browser storage
-    const img = new Image();
-    img.onload = () => {
-      const size = 600;
-      const scale = Math.min(1, size / Math.max(img.width, img.height));
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width * scale;
-      canvas.height = img.height * scale;
-      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-      const data = canvas.toDataURL("image/jpeg", 0.85);
-      showPhoto(data);
-      try { localStorage.setItem(PHOTO_KEY, data); } catch (e) { /* storage full */ }
-    };
-    img.src = reader.result;
-  };
-  reader.readAsDataURL(file);
-});
+// ---------- 6. Profile photo is loaded from profile.jpg ----------
 
 // ---------- 7. Contact form (opens the visitor's email app) ----------
 const form = document.getElementById("contactForm");
